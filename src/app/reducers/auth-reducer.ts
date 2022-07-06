@@ -2,7 +2,7 @@ import {Dispatch} from 'redux'
 import {
     SetAppIsInitializedAC,
     setAppStatusAC,
-} from '../../app/app-reducer'
+} from './app-reducer'
 import {authAPI, LoginParamsType} from "../../api/todolists-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";

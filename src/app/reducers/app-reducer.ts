@@ -1,7 +1,7 @@
 import {Dispatch} from "redux"
-import {authAPI} from "../api/todolists-api"
-import {setIsLoggedInAC} from "../features/Login/auth-reducer";
-import {handleServerAppError, handleServerNetworkError} from "../utils/error-utils";
+import {authAPI} from "../../api/todolists-api"
+import {setIsLoggedInAC} from "./auth-reducer";
+import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: InitialStateType = {

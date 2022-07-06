@@ -9,8 +9,8 @@ import {
     FilterValuesType,
     removeTodolistTC,
     TodolistDomainType
-} from './todolists-reducer'
-import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from './tasks-reducer'
+} from '../../app/reducers/todolists-reducer'
+import {addTaskTC, removeTaskTC, TasksStateType, updateTaskTC} from '../../app/reducers/tasks-reducer'
 import {TaskStatuses} from '../../api/todolists-api'
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';

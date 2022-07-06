@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import { AddBox } from '@mui/icons-material';
 
-type AddItemFormPropsType = {
+export type AddItemFormPropsType = {
     addItem: (title: string) => void
     disabled?: boolean
 }
