@@ -45,7 +45,6 @@ export type InitialStateType = {
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     authAPI.me().then(res => {
-        debugger
         if (res.data.resultCode === 0) {
             dispatch(setIsLoggedInAC({value: true}));
             dispatch(setAppStatusAC({status: 'succeeded'}))

@@ -31,7 +31,9 @@ function App({demo = false}: PropsType) {
     const isLoggedIn = useSelector<AppRootStateType>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
-        dispatch(initializeAppTC())
+        if (!demo) {
+            dispatch(initializeAppTC())
+        }
     }, [])
 
     const LogoutHandler = useCallback(() => {
@@ -44,6 +46,7 @@ function App({demo = false}: PropsType) {
             <CircularProgress/>
         </div>
     }
+
 
     return (
         <div className="App">
@@ -61,14 +64,12 @@ function App({demo = false}: PropsType) {
                 {status === 'loading' && <LinearProgress/>}
             </AppBar>
             <Container fixed>
-
                 <Routes>
                     <Route path={'/'} element={<TodolistsList/>}/>
                     <Route path={'/login'} element={<Login/>}/>
                     <Route path={'/404'} element={<h1 style={{textAlign: 'center'}}>404 not found</h1>}/>
                     <Route path={'/*'} element={<Navigate to={'/404'}/>}/>
                 </Routes>
-
             </Container>
         </div>
     )

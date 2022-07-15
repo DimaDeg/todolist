@@ -21,7 +21,7 @@ export const store = configureStore({
     middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware)
 });
 // определить автоматически тип всего объекта состояния
-export type AppRootStateType = ReturnType<typeof rootReducer>
-
+export type AppRootStateType = ReturnType<RootReducerType>
+export type RootReducerType = typeof rootReducer
 // @ts-ignore
 window.store = store;
