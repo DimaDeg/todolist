@@ -1,10 +1,10 @@
-import {AppRootStateType, RootReducerType} from "../../app/store";
+import {AppRootStateType, RootReducerType} from "../../app/bll/store";
 import {TaskPriorities, TaskStatuses} from "../../api/todolists-api";
 import {combineReducers} from "redux";
-import {tasksReducer} from "../../app/reducers/tasks-reducer";
-import {todolistsReducer} from "../../app/reducers/todolists-reducer";
-import {authReducer} from "../../app/reducers/auth-reducer";
-import {appReducer} from "../../app/reducers/app-reducer";
+import {tasksReducer} from "../../features/TodolistsList/Task/bll/tasks-reducer";
+import {todolistsReducer} from "../../features/TodolistsList/Todolist/bll/todolists-reducer";
+import {authReducer} from "../../features/auth/bll/auth-reducer";
+import {appReducer} from "../../app/bll/app-reducer";
 import {configureStore} from "@reduxjs/toolkit";
 import thunkMiddleware from "redux-thunk";
 import {Provider} from "react-redux";

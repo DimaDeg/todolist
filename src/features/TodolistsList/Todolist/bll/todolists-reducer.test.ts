@@ -1,10 +1,13 @@
 import {
-    addTodolistTC,
-    changeTodolistEntityStatusAC, changeTodolistFilterAC, changeTodolistTitleTC, fetchTodolistsTC, removeTodolistTC,
-    TodolistDomainType,
+    changeTodolistEntityStatusAC, changeTodolistFilter, TodolistDomainType,
     todolistsReducer
 } from "./todolists-reducer";
-import {TodolistType} from "../../api/todolists-api";
+import {TodolistType} from "../../../../api/todolists-api";
+import {
+    addTodolist,
+    changeTodolistTitle, fetchTodolists,
+    removeTodolist
+} from "./todolistActions";
 
 let todolistId1: string;
 let todolistId2: string;
@@ -20,7 +23,7 @@ beforeEach(() => {
 })
 
 test('correct todolist should be removed', () => {
-    const endState = todolistsReducer(startState, removeTodolistTC.fulfilled({id: todolistId1},'requestId',todolistId1));
+    const endState = todolistsReducer(startState, removeTodolist.fulfilled({id: todolistId1},'requestId',todolistId1));
     expect(endState.length).toBe(1);
     expect(endState[0].id).toBe(todolistId2);
 })
@@ -33,7 +36,7 @@ test('correct todolist should be added', () => {
         addedDate:'',
     }
 
-    const endState = todolistsReducer(startState,addTodolistTC.fulfilled(todo,'requestId','new todo'))
+    const endState = todolistsReducer(startState,addTodolist.fulfilled(todo,'requestId','new todo'))
 
     expect(endState.length).toBe(3);
     expect(endState[0].title).toBe(todo.title);
@@ -41,7 +44,7 @@ test('correct todolist should be added', () => {
 });
 
 test('filter should be changed',()=>{
-    const action = changeTodolistFilterAC({id:todolistId2,filter:'completed'});
+    const action = changeTodolistFilter({id:todolistId2,filter:'completed'});
 
     const endState = todolistsReducer(startState,action);
 
@@ -51,7 +54,7 @@ test('filter should be changed',()=>{
 
 test('todolist should changed its name',()=>{
     const param = {id:todolistId2,title:'new title'}
-    const action = changeTodolistTitleTC.fulfilled(param,'requestId',param);
+    const action = changeTodolistTitle.fulfilled(param,'requestId',param);
 
     const endState = todolistsReducer(startState,action);
 
@@ -61,7 +64,7 @@ test('todolist should changed its name',()=>{
 
 test('todolists should be added',()=>{
 
-    const action = fetchTodolistsTC.fulfilled({todolists:startState},'requestId');
+    const action = fetchTodolists.fulfilled({todolists:startState},'requestId');
 
     const endState = todolistsReducer([],action);
 

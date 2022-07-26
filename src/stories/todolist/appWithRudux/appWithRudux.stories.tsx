@@ -1,5 +1,5 @@
-import App from "../../../app/App";
-import {BrowserRouterDecorator, reduxStoreProviderDecorator} from "../../decorators/ReduxStoreProviderDecorator";
+import App from "../../../app/ui/App";
+import {BrowserRouterDecorator, reduxStoreProviderDecorator} from "../../decorators/reduxStoreProviderDecorator";
 
 
 export default {

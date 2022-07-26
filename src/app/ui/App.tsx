@@ -1,9 +1,7 @@
 import React, {useCallback, useEffect} from 'react'
 import './App.css'
-import {TodolistsList} from '../features/TodolistsList/TodolistsList'
-import {useDispatch, useSelector} from 'react-redux'
-import {AppRootStateType} from './store'
-import {initializeAppTC, RequestStatusType} from './reducers/app-reducer'
+import {TodolistsList} from '../../features/TodolistsList/'
+import {useSelector} from 'react-redux'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -12,11 +10,15 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import LinearProgress from '@mui/material/LinearProgress';
 import {Menu} from '@mui/icons-material';
-import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar';
-import {Login} from "../features/Login/Login";
-import {Routes, Route, Navigate} from "react-router-dom";
+import {ErrorSnackbar} from '../../components/ErrorSnackbar/ErrorSnackbar';
+import {Navigate, Route, Routes} from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
-import {logoutTC} from "./reducers/auth-reducer";
+import {selectIsInitialized, selectIsLoggedIn, selectStatus} from "../bll/selectors";
+import {logout} from "../../features/auth/bll/authActions";
+import {useAppDispatch} from "../bll/store";
+import {bindActionCreators} from "redux";
+import {appActions} from "../index";
+import {authActions, Login} from "../../features/auth";
 
 
 type PropsType = {
@@ -25,19 +27,21 @@ type PropsType = {
 
 function App({demo = false}: PropsType) {
 
-    const dispatch = useDispatch()
-    const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
-    const isInitialized = useSelector<AppRootStateType, boolean>(state => state.app.isInitialized)
-    const isLoggedIn = useSelector<AppRootStateType>(state => state.auth.isLoggedIn)
+    const dispatch = useAppDispatch()
+    const status = useSelector(selectStatus)
+    const isInitialized = useSelector(selectIsInitialized)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
+    const {initializeApp} = bindActionCreators(appActions,dispatch)
+    const {logout} = bindActionCreators(authActions,dispatch)
 
     useEffect(() => {
         if (!demo) {
-            dispatch(initializeAppTC())
+            initializeApp()
         }
     }, [])
 
     const LogoutHandler = useCallback(() => {
-        dispatch(logoutTC())
+        logout()
     }, []);
 
     if (!isInitialized) {

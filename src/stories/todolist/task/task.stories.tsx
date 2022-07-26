@@ -1,35 +1,20 @@
-import {Task} from "../../../features/TodolistsList/Todolist/Task/Task";
-import {ComponentMeta, ComponentStory} from "@storybook/react";
-import {action} from "@storybook/addon-actions";
-import {TaskStatuses} from "../../../api/todolists-api";
+import {Task} from "../../../features/TodolistsList/Task/ui/Task";
+import {TaskPriorities, TaskStatuses} from "../../../api/todolists-api";
+import {reduxStoreProviderDecorator} from "../../decorators/reduxStoreProviderDecorator";
 
 export default {
     title: 'Task',
-    component: Task
-}as ComponentMeta<typeof Task>
-
-const changeTaskStatusCallback = action('status changed')
-const changeTaskTitleCallback = action('title changed')
-const removeTaskCallback = action('remove button clicked')
-
-const baseArgs = {
-    changeTaskStatus: changeTaskStatusCallback,
-    changeTaskTitle: changeTaskTitleCallback,
-    removeTask: removeTaskCallback,
+    component: Task,
+    decorators: [reduxStoreProviderDecorator]
 }
 
-const Template: ComponentStory<typeof Task> = (args) => <Task {...args}/>
-
-export const TaskIsDoneExample = Template.bind({})
-TaskIsDoneExample.args = {
-    ...baseArgs,
-    task: {id:'1',status:TaskStatuses.Completed,description:'',deadline:''
-        ,priority:0,order:0,todoListId:'todoID1',startDate:'',addedDate:'', title: 'JS'},
-}
-
-export const TaskIsNotDoneExample = Template.bind({})
-TaskIsNotDoneExample.args = {
-    ...baseArgs,
-    task: {id:'1',status:TaskStatuses.New,description:'',deadline:''
-        ,priority:0,order:0,todoListId:'todoID1',startDate:'',addedDate:'', title: 'JS'},
+export const TaskBaseExample = () => {
+    return <div>
+        <Task task={{id:'1',status:TaskStatuses.Completed,title:'CSS', todoListId:'todolistId1',
+        addedDate:'',priority:TaskPriorities.Low,startDate:'',deadline:'',order: 0,description:''
+        }} todolistId={'todolistId1'}/>
+        <Task task={{id:'1',status:TaskStatuses.New,title:'JS', todoListId:'todolistId1',
+            addedDate:'',priority:TaskPriorities.Low,startDate:'',deadline:'',order: 0,description:''
+        }} todolistId={'todolistId1'}/>
+    </div>
 }

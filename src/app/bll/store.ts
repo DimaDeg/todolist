@@ -1,9 +1,9 @@
-import {tasksReducer} from './reducers/tasks-reducer';
-import {todolistsReducer} from './reducers/todolists-reducer';
+import {tasksReducer} from '../../features/TodolistsList/Task/bll/tasks-reducer';
+import {todolistsReducer} from '../../features/TodolistsList/Todolist/bll/todolists-reducer';
 import {combineReducers} from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import {appReducer} from './reducers/app-reducer'
-import {authReducer} from "./reducers/auth-reducer";
+import {appReducer} from './app-reducer'
+import {authReducer} from "../../features/auth/bll/auth-reducer";
 import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 
@@ -16,7 +16,6 @@ const rootReducer = combineReducers({
     auth: authReducer
 })
 // непосредственно создаём store
-//export const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 export const store = configureStore({
     reducer: rootReducer,
     middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware)
@@ -29,3 +28,4 @@ window.store = store;
 
 export type AppDispatchType = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatchType>()
+

@@ -9,14 +9,16 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from 'formik';
 import {useSelector} from "react-redux";
-import {loginTC} from "../../app/reducers/auth-reducer";
-import {AppRootStateType, useAppDispatch} from "../../app/store";
+import {useAppDispatch} from "../../../app/bll/store";
 import {Navigate} from 'react-router-dom';
+import {selectIsLoggedIn} from "../../../app/bll/selectors";
+import {bindActionCreators} from "redux";
+import {authActions} from "../index";
 
 
 export const Login = () => {
 
-    const isLoggedIn = useSelector<AppRootStateType,boolean>(state => state.auth.isLoggedIn)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
 
     type FormikErrorType = {
         email?: string
@@ -24,7 +26,7 @@ export const Login = () => {
         rememberMe?: boolean
     }
 
-    const dispatch=useAppDispatch();
+    const {login} = bindActionCreators(authActions, useAppDispatch())
 
     const formik = useFormik({
         initialValues: {
@@ -48,12 +50,12 @@ export const Login = () => {
             return errors;
         },
         onSubmit: (values) => {
-            dispatch(loginTC(values));
+            login(values);
             formik.resetForm()
         },
     })
 
-    if (isLoggedIn){
+    if (isLoggedIn) {
         return <Navigate to={'/'}/>
     }
 
