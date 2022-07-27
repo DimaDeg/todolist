@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect} from 'react'
-import {AddItemForm} from '../../../../components/AddItemForm/AddItemForm'
+import {AddItemForHelperType, AddItemForm} from '../../../../components/AddItemForm/AddItemForm'
 import {EditableSpan} from '../../../../components/EditableSpan/EditableSpan'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -10,6 +10,7 @@ import {FilterValuesType, TodolistDomainType} from '../bll/todolists-reducer'
 import {bindActionCreators} from "redux";
 import {tasksActions, todolistsActions} from "../../index";
 import {useAppDispatch} from "../../../../app/bll/store";
+import Paper from "@mui/material/Paper";
 
 
 
@@ -28,7 +29,7 @@ export const Todolist = React.memo( ({demo = false, ...props}: PropsType) => {
     const dispatch = useAppDispatch()
 
     const {changeTodolistFilter, removeTodolist, changeTodolistTitle} = bindActionCreators(todolistsActions, dispatch)
-    const {addTask, fetchTasks} = bindActionCreators(tasksActions, dispatch)
+    const {fetchTasks} = bindActionCreators(tasksActions, dispatch)
 
     const {todolist,tasks} = props
 
@@ -40,8 +41,19 @@ export const Todolist = React.memo( ({demo = false, ...props}: PropsType) => {
         fetchTasks(todolist.id)
     }, [])
 
-    const addTaskCallback = useCallback((title: string) => {
-        addTask({title, todolistId: todolist.id})
+    const addTaskCallback = useCallback(async (title: string,helper:AddItemForHelperType) => {
+        let thunk = tasksActions.addTask({title,todolistId: todolist.id})
+        const resAction = await dispatch(thunk)
+        if(tasksActions.addTask.rejected.match(resAction)){
+            if(resAction.payload?.errors?.length){
+                const errorMessage = resAction.payload?.errors[0]
+                helper.setError(errorMessage)
+            } else {
+                helper.setError('Some error occurred')
+            }
+        } else {
+            helper.setTitle('')
+        }
     }, [todolist.id])
 
     const removeTodolistCallback = useCallback(() => {
@@ -76,11 +88,12 @@ export const Todolist = React.memo( ({demo = false, ...props}: PropsType) => {
         </Button>
     }
 
-    return <div>
+    return <Paper style={{padding: '10px',position:'relative'}}>
+        <IconButton size={'small'} onClick={removeTodolistCallback} disabled={todolist.entityStatus === 'loading'}
+                    style={{position:'absolute',right:'5px', top:'5px'}}>
+            <Delete fontSize={'small'}/>
+        </IconButton>
         <h3><EditableSpan value={todolist.title} onChange={changeTodolistTitleCallback}/>
-            <IconButton onClick={removeTodolistCallback} disabled={todolist.entityStatus === 'loading'}>
-                <Delete/>
-            </IconButton>
         </h3>
         <AddItemForm addItem={addTaskCallback} disabled={todolist.entityStatus === 'loading'}/>
         <div>
@@ -88,12 +101,13 @@ export const Todolist = React.memo( ({demo = false, ...props}: PropsType) => {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={todolist.id}
                 />)
             }
+            {!tasksForTodolist.length && <div style={{ padding: '10px', color:'grey'}}>No Tasks</div>}
         </div>
         <div style={{paddingTop: '10px'}}>
             {renderFilterButton('all','inherit','All')}
             {renderFilterButton('active','primary','Active')}
             {renderFilterButton('completed','secondary','Completed')}
         </div>
-    </div>
+    </Paper>
 })
 

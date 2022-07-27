@@ -29,3 +29,4 @@ window.store = store;
 export type AppDispatchType = typeof store.dispatch
 export const useAppDispatch = () => useDispatch<AppDispatchType>()
 
+export type ThunkErrorType = {rejectValue:{errors:string[],fieldsErrors?:[]}}

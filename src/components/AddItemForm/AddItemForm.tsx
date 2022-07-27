@@ -1,23 +1,26 @@
-import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
+import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import { AddBox } from '@mui/icons-material';
+import {AddBox} from '@mui/icons-material';
+
+export type AddItemForHelperType = {
+    setError: (error: string) => void
+    setTitle: (title: string) => void
+}
 
 export type AddItemFormPropsType = {
-    addItem: (title: string) => void
+    addItem: (title: string, helpers:AddItemForHelperType) => void
     disabled?: boolean
 }
 
-export const AddItemForm = React.memo(function ({addItem, disabled = false}: AddItemFormPropsType) {
-    console.log('AddItemForm called')
+export const AddItemForm = React.memo(({addItem, disabled = false}: AddItemFormPropsType) => {
 
     let [title, setTitle] = useState('')
     let [error, setError] = useState<string | null>(null)
 
     const addItemHandler = () => {
         if (title.trim() !== '') {
-            addItem(title);
-            setTitle('');
+            addItem(title, {setError, setTitle});
         } else {
             setError('Title is required');
         }
@@ -27,12 +30,12 @@ export const AddItemForm = React.memo(function ({addItem, disabled = false}: Add
         setTitle(e.currentTarget.value)
     }
 
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const onKeyPressHandler = async (e: KeyboardEvent<HTMLInputElement>) => {
         if (error !== null) {
             setError(null);
         }
-        if (e.charCode === 13) {
-            addItemHandler();
+        if (e.key === 'Enter') {
+            await addItemHandler();
         }
     }
 
@@ -45,8 +48,9 @@ export const AddItemForm = React.memo(function ({addItem, disabled = false}: Add
                    onKeyPress={onKeyPressHandler}
                    label="Title"
                    helperText={error}
+                   style={{width:'225px'}}
         />
-        <IconButton color="primary" onClick={addItemHandler} disabled={disabled}>
+        <IconButton color="primary" onClick={addItemHandler} style={{margin: '7px 0 0 12px'}} disabled={disabled}>
             <AddBox/>
         </IconButton>
     </div>

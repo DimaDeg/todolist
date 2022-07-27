@@ -1,8 +1,9 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {setAppStatusAC} from "../../../../app/bll/app-reducer";
-import {todolistsAPI} from "../../../../api/todolists-api";
-import {handleServerAppError, handleServerNetworkError} from "../../../../utils/error-utils";
+import {todolistsAPI, TodolistType} from "../../../../api/todolists-api";
+import {handleServerNetworkError} from "../../../../utils/error-utils";
 import {changeTodolistEntityStatusAC} from "./todolists-reducer";
+import {ThunkErrorType} from "../../../../app/bll/store";
 
 
 // thunks
@@ -23,7 +24,9 @@ export const removeTodolist = createAsyncThunk('todolist/removeTodolist', async 
     dispatch(setAppStatusAC({status: 'succeeded'}))
     return {id: todolistId}
 })
-export const addTodolist = createAsyncThunk('todolist/addTodolist', async (title: string, {
+
+export const addTodolist = createAsyncThunk<TodolistType,string,ThunkErrorType>
+    ('todolist/addTodolist', async (title, {
     dispatch,
     rejectWithValue
 }) => {
@@ -34,17 +37,16 @@ export const addTodolist = createAsyncThunk('todolist/addTodolist', async (title
             dispatch(setAppStatusAC({status: 'succeeded'}))
             return res.data.data.item
         } else {
-            handleServerAppError(res.data, dispatch);
             dispatch(setAppStatusAC({status: 'failed'}))
-            return rejectWithValue(null)
+            return rejectWithValue({errors:res.data.messages})
         }
 
     } catch (error: any) {
         handleServerNetworkError(error, dispatch)
-        dispatch(setAppStatusAC({status: 'failed'}))
-        return rejectWithValue(null)
+        return rejectWithValue(error.message)
     }
 })
+
 export const changeTodolistTitle = createAsyncThunk('todolist/changeTodolistTitle', async (param: { id: string, title: string }, {dispatch}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     await todolistsAPI.updateTodolist(param.id, param.title)
