@@ -13,7 +13,6 @@ import {useAppDispatch} from "../../../../app/bll/store";
 import Paper from "@mui/material/Paper";
 
 
-
 type PropsType = {
     todolist: TodolistDomainType
     tasks: Array<TaskType>

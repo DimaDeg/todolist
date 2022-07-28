@@ -6,24 +6,41 @@ import {AppRootStateType, ThunkErrorType} from "../../../../app/bll/store";
 import {UpdateDomainTaskModelType} from "./tasks-reducer";
 
 
-export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: string, {dispatch}) => {
+export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async (todolistId: string, {dispatch,rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
-    const res = await todolistsAPI.getTasks(todolistId);
-    const tasks = res.data.items
-    dispatch(setAppStatusAC({status: 'succeeded'}))
-    return {tasks, todolistId}
+    try {
+        const res = await todolistsAPI.getTasks(todolistId);
+        const tasks = res.data.items
+        dispatch(setAppStatusAC({status: 'succeeded'}))
+        return {tasks, todolistId}
+    } catch (error: any) {
+        handleServerNetworkError(error, dispatch);
+        return rejectWithValue({errors: error.messages})
+    }
+
 });
 
-export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { taskId: string, todolistId: string }, {dispatch}) => {
+export const removeTask = createAsyncThunk('tasks/removeTask', async (param: { taskId: string, todolistId: string }, {dispatch,rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
-    await todolistsAPI.deleteTask(param.todolistId, param.taskId)
-    dispatch(setAppStatusAC({status: 'succeeded'}))
-    return {taskId: param.taskId, todolistId: param.todolistId}
+    try {
+        const res = await todolistsAPI.deleteTask(param.todolistId, param.taskId)
+        if(res.data.resultCode === 0){
+            dispatch(setAppStatusAC({status: 'succeeded'}))
+            return {taskId: param.taskId, todolistId: param.todolistId}
+        } else {
+            dispatch(setAppStatusAC({status: 'failed'}))
+            return rejectWithValue({errors: res.data.messages, fieldsErrors: undefined})
+        }
+
+    }catch (error: any) {
+        handleServerNetworkError(error, dispatch);
+        return rejectWithValue({errors: error.messages})
+    }
+
 });
 
-export const addTask = createAsyncThunk<TaskType, { title: string, todolistId: string },ThunkErrorType>
-('tasks/addTask', async (param, {dispatch
-    ,rejectWithValue}) => {
+export const addTask = createAsyncThunk<TaskType, { title: string, todolistId: string }, ThunkErrorType>
+('tasks/addTask', async (param, {dispatch, rejectWithValue}) => {
     dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await todolistsAPI.createTask(param.todolistId, param.title)
@@ -32,11 +49,11 @@ export const addTask = createAsyncThunk<TaskType, { title: string, todolistId: s
             return res.data.data.item
         } else {
             dispatch(setAppStatusAC({status: 'failed'}))
-            return rejectWithValue({errors: res.data.messages})
+            return rejectWithValue({errors: res.data.messages, fieldsErrors: undefined})
         }
-    } catch (error:any) {
+    } catch (error: any) {
         handleServerNetworkError(error, dispatch);
-        return rejectWithValue({errors:error.messages})
+        return rejectWithValue({errors: error.messages})
     }
 })
 
@@ -59,16 +76,15 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async (param: { t
     dispatch(setAppStatusAC({status: 'loading'}))
     try {
         const res = await todolistsAPI.updateTask(param.todolistId, param.taskId, apiModel)
-        if (res.data.resultCode === 0){
+        if (res.data.resultCode === 0) {
             dispatch(setAppStatusAC({status: 'succeeded'}))
             return param
         } else {
             handleServerAppError(res.data, dispatch);
-            return rejectWithValue(null)
+            return rejectWithValue({errors: res.data.messages, fieldsErrors: undefined})
         }
-    }
-    catch (error: any) {
+    } catch (error: any) {
         handleServerNetworkError(error, dispatch);
-        return rejectWithValue(null)
+        return rejectWithValue({errors: error.messages})
     }
 });

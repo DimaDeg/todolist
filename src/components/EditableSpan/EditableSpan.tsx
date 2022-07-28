@@ -24,6 +24,7 @@ export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
     }
 
     return editMode
-        ? <TextField value={title} onChange={changeTitle} autoFocus style={{width:'200px'}} onBlur={activateViewMode}/>
-        : <span style={{hyphens:'auto',flexWrap:'wrap'}} onDoubleClick={activateEditMode}>{props.value}</span>
+        ? <TextField value={title} variant={'standard'} onChange={changeTitle} autoFocus style={{width:'200px'}} onBlur={activateViewMode}/>
+        : <span style={{hyphens: 'auto', flexWrap: 'wrap'}} onDoubleClick={activateEditMode}>{props.value}</span>
+
 });

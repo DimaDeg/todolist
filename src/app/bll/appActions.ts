@@ -1,4 +1,3 @@
-//thunks
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {authAPI} from "../../api/todolists-api";
 import {setIsLoggedInAC} from "../../features/auth/bll/auth-reducer";

@@ -1,6 +1,7 @@
+import { tasksReducer } from './Task/bll/tasks-reducer';
 import * as tasksActions from './Task/bll/tasksActions'
 import * as todolistAsyncActions from './Todolist/bll/todolistActions'
-import {slice} from './Todolist/bll/todolists-reducer'
+import {slice, todolistsReducer} from './Todolist/bll/todolists-reducer'
 import {TodolistsList} from "./TodolistsList";
 
 const todolistsActions = {
@@ -11,5 +12,7 @@ const todolistsActions = {
 export {
     tasksActions,
     todolistsActions,
-    TodolistsList
+    TodolistsList,
+    todolistsReducer,
+    tasksReducer
 }
