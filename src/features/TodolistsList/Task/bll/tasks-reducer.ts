@@ -1,4 +1,4 @@
-import {TaskPriorities, TaskStatuses, TaskType, TodolistType} from '../../../../api/todolists-api';
+import {TaskPriorities, TaskStatuses, TaskType, TodolistType} from '../../../../api/types';
 import {createSlice,} from "@reduxjs/toolkit";
 import {
     addTask,

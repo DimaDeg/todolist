@@ -5,12 +5,12 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import {Delete} from '@mui/icons-material';
 import {Task} from '../../Task/ui/Task'
-import {TaskStatuses, TaskType} from '../../../../api/todolists-api'
 import {FilterValuesType, TodolistDomainType} from '../bll/todolists-reducer'
 import {bindActionCreators} from "redux";
 import {tasksActions, todolistsActions} from "../../index";
 import {useAppDispatch} from "../../../../app/bll/store";
 import Paper from "@mui/material/Paper";
+import {TaskStatuses, TaskType} from "../../../../api/types";
 
 
 type PropsType = {

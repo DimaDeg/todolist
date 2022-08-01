@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import {appReducer} from './app-reducer'
+import {appReducer} from '../../features/Application/'
 import {configureStore} from "@reduxjs/toolkit";
 import {useDispatch} from "react-redux";
 import {authReducer} from "../../features/auth";

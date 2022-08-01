@@ -1,5 +1,4 @@
-import {TodolistType} from '../../../../api/todolists-api'
-import {RequestStatusType} from '../../../../app/bll/app-reducer'
+import {RequestStatusType} from '../../../Application/bll/application-reducer'
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {
     addTodolist,
@@ -7,6 +6,7 @@ import {
     fetchTodolists,
     removeTodolist
 } from "./todolistActions";
+import { TodolistType } from '../../../../api/types';
 
 export const slice = createSlice({
     name: 'todolist',

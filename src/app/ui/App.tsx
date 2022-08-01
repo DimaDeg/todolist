@@ -14,11 +14,10 @@ import {ErrorSnackbar} from '../../components/ErrorSnackbar/ErrorSnackbar';
 import {Navigate, Route, Routes} from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import {selectIsInitialized, selectIsLoggedIn, selectStatus} from "../bll/selectors";
-import {logout} from "../../features/auth/bll/authActions";
 import {useAppDispatch} from "../bll/store";
 import {bindActionCreators} from "redux";
-import {appActions} from "../index";
-import {authActions, Login} from "../../features/auth";
+import {Login,authActions} from "../../features/auth";
+import {appActions} from "../../features/Application";
 
 
 type PropsType = {

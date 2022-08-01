@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { initializeApp } from "./appActions";
+import { initializeApp } from "./applicationActions";
 
 
-const slice = createSlice({
+export const slice = createSlice({
     name: 'app',
     initialState: {
         status: 'idle',
@@ -10,10 +10,10 @@ const slice = createSlice({
         isInitialized: false
     } as InitialStateType,
     reducers: {
-        setAppErrorAC: (state, action: PayloadAction<{ error: string | null }>) => {
+        setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
             state.error = action.payload.error
         },
-        setAppStatusAC: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
+        setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
             state.status = action.payload.status
         },
     },
@@ -24,8 +24,7 @@ const slice = createSlice({
     }
 })
 
-export const appReducer = slice.reducer;
-export const {setAppStatusAC, setAppErrorAC} = slice.actions;
+export const applicationReducer = slice.reducer;
 
 
 //types
@@ -37,5 +36,3 @@ export type InitialStateType = {
     error: string | null
     isInitialized: boolean
 }
-
-

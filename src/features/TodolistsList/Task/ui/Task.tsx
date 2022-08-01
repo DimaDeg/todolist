@@ -3,10 +3,10 @@ import {EditableSpan} from '../../../../components/EditableSpan/EditableSpan'
 import Delete from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import Checkbox from '@mui/material/Checkbox';
-import {TaskStatuses, TaskType} from '../../../../api/todolists-api'
 import {bindActionCreators} from "redux";
 import {tasksActions} from "../../index";
 import {useAppDispatch} from "../../../../app/bll/store";
+import {TaskStatuses, TaskType} from "../../../../api/types";
 
 type TaskPropsType = {
     task: TaskType

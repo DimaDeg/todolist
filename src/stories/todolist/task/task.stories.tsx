@@ -1,5 +1,5 @@
 import {Task} from "../../../features/TodolistsList/Task/ui/Task";
-import {TaskPriorities, TaskStatuses} from "../../../api/todolists-api";
+import {TaskPriorities, TaskStatuses} from "../../../api/types";
 import {reduxStoreProviderDecorator} from "../../decorators/reduxStoreProviderDecorator";
 
 export default {

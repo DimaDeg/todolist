@@ -1,5 +1,5 @@
 import {tasksReducer,TasksStateType} from "./tasks-reducer";
-import {TaskPriorities, TaskStatuses} from "../../../../api/todolists-api";
+import {TaskPriorities, TaskStatuses} from "../../../../api/types";
 import {
     addTask,
     fetchTasks,
