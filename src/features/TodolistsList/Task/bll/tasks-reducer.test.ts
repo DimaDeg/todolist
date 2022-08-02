@@ -1,17 +1,9 @@
-import {tasksReducer,TasksStateType} from "./tasks-reducer";
+import {TasksStateType, slice} from "./tasks-reducer";
 import {TaskPriorities, TaskStatuses} from "../../../../api/types";
-import {
-    addTask,
-    fetchTasks,
-    removeTask,
-    updateTask
-} from "./tasksActions";
-import {
-    addTodolist,
-    fetchTodolists,
-    removeTodolist
-} from "../../Todolist/bll/todolistActions";
+import {addTask, fetchTasks, removeTask, updateTask} from "./tasksActions";
+import {todolistsAsyncActions} from "../../Todolist/bll/todolistActions"
 
+const {reducer: tasksReducer} = slice
 let startState: TasksStateType = {};
 beforeEach(() => {
     startState = {
@@ -90,7 +82,7 @@ test('task title should be updated in correct array', () => {
 
 test('new array should be added when new todolist is added', () => {
     const param = {id: 'newId', title: 'new todo', addedDate: '', order: 0}
-    const action = addTodolist.fulfilled(param, 'requiredId', 'newTodo')
+    const action = todolistsAsyncActions.addTodolist.fulfilled(param, 'requiredId', 'newTodo')
     const endState = tasksReducer(startState, action);
     const keys = Object.keys(endState);
     const newKey = keys.find(k => k != 'todolistId1' && k != 'todolistId2')
@@ -102,7 +94,7 @@ test('new array should be added when new todolist is added', () => {
 });
 
 test('property with todolistId should be deleted', () => {
-    const action = removeTodolist.fulfilled({id: 'todolistId2'}, 'requestId', 'todolistId2');
+    const action = todolistsAsyncActions.removeTodolist.fulfilled({id: 'todolistId2'}, 'requestId', 'todolistId2');
     const endState = tasksReducer(startState, action);
 
     const keys = Object.keys(endState);
@@ -114,11 +106,12 @@ test('property with todolistId should be deleted', () => {
 test('empty array should be added when we set todolist', () => {
     let payload = {
         todolists: [{
-            id: '1', title: 'title 1', order: 0, addedDate: ''},
+            id: '1', title: 'title 1', order: 0, addedDate: ''
+        },
             {id: '2', title: 'title2', order: 0, addedDate: ''}
         ]
     }
-    const action = fetchTodolists.fulfilled(payload,'requestId'   );
+    const action = todolistsAsyncActions.fetchTodolists.fulfilled(payload, 'requestId', undefined);
     const endState = tasksReducer({}, action);
     const keys = Object.keys(endState);
     expect(keys.length).toBe(2);

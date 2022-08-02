@@ -1,46 +1,40 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {authAPI} from "../../../api/todolists-api";
-import {handleServerAppError, handleServerNetworkError} from "../../../utils/error-utils";
-import { appActions } from "../../Application";
+import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../../utils/error-utils";
+import {commonActions} from "../../CommonActions";
 import {LoginParamsType} from "../../../api/types";
 
-
-
+const {setAppStatus} = commonActions
 //thunks
 export const login = createAsyncThunk('auth/login', async (data: LoginParamsType, thunkAPI) => {
-    thunkAPI.dispatch(appActions.setAppStatus({status: 'loading'}))
+
+    thunkAPI.dispatch(setAppStatus({status: 'loading'}))
     try {
         const res = await authAPI.login(data)
         if (res.data.resultCode === 0) {
-            thunkAPI.dispatch(appActions.setAppStatus({status: 'succeeded'}))
+            thunkAPI.dispatch(setAppStatus({status: 'succeeded'}))
         } else {
-            handleServerAppError(res.data, thunkAPI.dispatch)
-            thunkAPI.dispatch(appActions.setAppStatus({status: 'failed'}))
-            return thunkAPI.rejectWithValue({errors:res.data,fieldsErrors:res.data.fieldsErrors})
+            return handleAsyncServerAppError(res.data,thunkAPI)
+
         }
     }
     catch (error:any) {
-        handleServerNetworkError(error, thunkAPI.dispatch)
-        thunkAPI.dispatch(appActions.setAppStatus({status: 'failed'}))
-        return thunkAPI.rejectWithValue({errors:[error.message],fieldsErrors:undefined})
+        return handleAsyncServerAppError(error,thunkAPI)
     }
 })
 
 export const logout = createAsyncThunk('auth/logout',async (param, thunkAPI) => {
-    thunkAPI.dispatch(appActions.setAppStatus({status: 'loading'}))
+
+    thunkAPI.dispatch(setAppStatus({status: 'loading'}))
     try {
         const res = await authAPI.logout()
         if (res.data.resultCode === 0) {
-            thunkAPI.dispatch(appActions.setAppStatus({status: 'succeeded'}))
+            thunkAPI.dispatch(setAppStatus({status: 'succeeded'}))
         } else {
-            handleServerAppError(res.data, thunkAPI.dispatch)
-            thunkAPI.dispatch(appActions.setAppStatus({status: 'failed'}))
-            return thunkAPI.rejectWithValue('')
+            return handleAsyncServerAppError(res.data, thunkAPI)
         }
     }
     catch (error:any){
-        handleServerNetworkError(error.data, thunkAPI.dispatch)
-        thunkAPI.dispatch(appActions.setAppStatus({status: 'failed'}))
-        return thunkAPI.rejectWithValue('')
+        return handleAsyncServerNetworkError(error,thunkAPI)
     }
 })

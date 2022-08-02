@@ -1,5 +1,6 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import { initializeApp } from "./applicationActions";
+import {createSlice} from "@reduxjs/toolkit";
+import {initializeApp} from "./applicationActions";
+import {commonActions} from "../../CommonActions/";
 
 
 export const slice = createSlice({
@@ -9,18 +10,18 @@ export const slice = createSlice({
         error: null,
         isInitialized: false
     } as InitialStateType,
-    reducers: {
-        setAppError: (state, action: PayloadAction<{ error: string | null }>) => {
-            state.error = action.payload.error
-        },
-        setAppStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
-            state.status = action.payload.status
-        },
-    },
+    reducers: {},
     extraReducers: builder => {
-        builder.addCase(initializeApp.fulfilled, (state) => {
+        builder
+            .addCase(initializeApp.fulfilled, (state) => {
             state.isInitialized = true
         })
+            .addCase(commonActions.setAppStatus, (state, action) => {
+                state.status = action.payload.status
+            })
+            .addCase(commonActions.setAppError, (state, action) => {
+                state.error = action.payload.error
+            })
     }
 })
 

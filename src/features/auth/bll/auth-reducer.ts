@@ -13,10 +13,11 @@ export const slice = createSlice({
         }
     },
     extraReducers: builder => {
-        builder.addCase(login.fulfilled, (state) => {
+        builder
+            .addCase(login.fulfilled, (state) => {
             state.isLoggedIn = true
-        });
-        builder.addCase(logout.fulfilled,(state)=>{
+        })
+            .addCase(logout.fulfilled,(state)=>{
             state.isLoggedIn = false
         })
     }

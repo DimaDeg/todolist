@@ -1,17 +1,13 @@
-import {
-    changeTodolistEntityStatusAC, changeTodolistFilter, TodolistDomainType,
-    todolistsReducer
-} from "./todolists-reducer";
+import {slice,TodolistDomainType,todolistsReducer} from "./todolists-reducer";
 import {TodolistType} from "../../../../api/types";
-import {
-    addTodolist,
-    changeTodolistTitle, fetchTodolists,
-    removeTodolist
-} from "./todolistActions";
+import {todolistsAsyncActions} from "./todolistActions";
 
 let todolistId1: string;
 let todolistId2: string;
 let startState: Array<TodolistDomainType> = [];
+
+const {removeTodolist,fetchTodolists, addTodolist,changeTodolistTitle} = todolistsAsyncActions
+const {changeTodolistEntityStatus,changeTodolistFilter} = slice.actions
 
 beforeEach(() => {
     todolistId1 = 'todoId1';
@@ -36,7 +32,7 @@ test('correct todolist should be added', () => {
         addedDate:'',
     }
 
-    const endState = todolistsReducer(startState,addTodolist.fulfilled(todo,'requestId','new todo'))
+    const endState = todolistsReducer(startState, addTodolist.fulfilled({todolist:todo},'requestId','new todo'))
 
     expect(endState.length).toBe(3);
     expect(endState[0].title).toBe(todo.title);
@@ -64,7 +60,7 @@ test('todolist should changed its name',()=>{
 
 test('todolists should be added',()=>{
 
-    const action = fetchTodolists.fulfilled({todolists:startState},'requestId');
+    const action = fetchTodolists.fulfilled({todolists:startState},'requestId',undefined);
 
     const endState = todolistsReducer([],action);
 
@@ -72,7 +68,7 @@ test('todolists should be added',()=>{
 });
 
 test('entity status should be changed',()=>{
-    const action = changeTodolistEntityStatusAC({id:todolistId2,status:'loading'});
+    const action = changeTodolistEntityStatus({id:todolistId2,status:'loading'});
 
     const endState = todolistsReducer(startState,action);
 

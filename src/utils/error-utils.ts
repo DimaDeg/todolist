@@ -1,20 +1,25 @@
 import {ResponseType} from '../api/types'
-import {Dispatch} from 'redux'
-import { appActions } from '../features/Application'
+import {commonActions} from '../features/CommonActions'
 
+type ThunkAPIType = {
+    dispatch: (action: any) => any
+    rejectWithValue: Function
+}
+const {setAppStatus, setAppError} = commonActions
 
-const {setAppStatus, setAppError} = appActions
-
-export const handleServerAppError = <D>(data: ResponseType<D>, dispatch: Dispatch) => {
-    if (data.messages.length) {
-        dispatch(setAppError({error: data.messages[0]}))
-    } else {
-        dispatch(setAppError({error: 'Some error occurred'}))
+export const handleAsyncServerAppError = <D>(data: ResponseType<D>, ThunkApi: ThunkAPIType, showError = true) => {
+    if (showError) {
+        ThunkApi.dispatch(setAppError({error: data.messages.length ? data.messages[0] : 'Some error occurred'}))
     }
-    dispatch(setAppStatus({status: 'failed'}))
+    ThunkApi.dispatch(setAppStatus({status: 'failed'}))
+    return ThunkApi.rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
 }
 
-export const handleServerNetworkError = (error: { message: string }, dispatch: Dispatch) => {
-    dispatch(setAppError({error: error.message ? error.message : 'Some error occurred'}))
-    dispatch(setAppStatus({status: 'failed'}))
+export const handleAsyncServerNetworkError = (error: { message: string }, ThunkApi: ThunkAPIType, showError = true) => {
+
+    if(showError){
+        ThunkApi.dispatch(setAppError({error: error.message ? error.message : 'Some error occurred'}))
+    }
+    ThunkApi.dispatch(setAppStatus({status: 'failed'}))
+    return ThunkApi.rejectWithValue({errors: [error.message], fieldsErrors: undefined})
 }

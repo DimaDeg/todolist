@@ -16,7 +16,7 @@ import CircularProgress from '@mui/material/CircularProgress/CircularProgress';
 import {selectIsInitialized, selectIsLoggedIn, selectStatus} from "../bll/selectors";
 import {useAppDispatch} from "../bll/store";
 import {bindActionCreators} from "redux";
-import {Login,authActions} from "../../features/auth";
+import {authActions, Login} from "../../features/auth";
 import {appActions} from "../../features/Application";
 
 
