@@ -1,4 +1,4 @@
-import {TasksStateType, slice} from "./tasks-reducer";
+import {slice, TasksStateType} from "./tasks-reducer";
 import {TaskPriorities, TaskStatuses} from "../../../../api/types";
 import {addTask, fetchTasks, removeTask, updateTask} from "./tasksActions";
 import {todolistsAsyncActions} from "../../Todolist/bll/todolistActions"
@@ -81,8 +81,8 @@ test('task title should be updated in correct array', () => {
 });
 
 test('new array should be added when new todolist is added', () => {
-    const param = {id: 'newId', title: 'new todo', addedDate: '', order: 0}
-    const action = todolistsAsyncActions.addTodolist.fulfilled(param, 'requiredId', 'newTodo')
+    const param = {id: 'newId', title: 'new todo', addedDate: '', order: 0, filter: 'all', entityStatus: 'idle'}
+    const action = todolistsAsyncActions.addTodolist.fulfilled({todolist:param} , 'requiredId', 'newTodo')
     const endState = tasksReducer(startState, action);
     const keys = Object.keys(endState);
     const newKey = keys.find(k => k != 'todolistId1' && k != 'todolistId2')
@@ -111,8 +111,8 @@ test('empty array should be added when we set todolist', () => {
             {id: '2', title: 'title2', order: 0, addedDate: ''}
         ]
     }
-    const action = todolistsAsyncActions.fetchTodolists.fulfilled(payload, 'requestId', undefined);
-    const endState = tasksReducer({}, action);
+    // const action = todolistsAsyncActions.fetchTodolists.fulfilled(payload, 'requestId', undefined);
+    const endState = tasksReducer({}, todolistsAsyncActions.fetchTodolists.fulfilled(payload, 'requestId', undefined));
     const keys = Object.keys(endState);
     expect(keys.length).toBe(2);
     expect(endState['1']).toBeDefined();

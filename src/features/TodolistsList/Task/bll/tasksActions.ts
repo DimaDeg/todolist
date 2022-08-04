@@ -1,10 +1,10 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {todolistsAPI} from "../../../../api/todolists-api";
-import {AppRootStateType, ThunkErrorType} from "../../../../app/bll/store";
 import {UpdateDomainTaskModelType} from "./tasks-reducer";
 import {commonActions} from "../../../CommonActions";
 import {TaskType, UpdateTaskModelType} from "../../../../api/types";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../../../utils/error-utils";
+import {AppRootStateType, ThunkErrorType} from "../../../../app/bll/types";
 
 const {setAppStatus} = commonActions
 

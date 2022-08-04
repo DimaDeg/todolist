@@ -19,12 +19,7 @@ import {bindActionCreators} from "redux";
 import {authActions, Login} from "../../features/auth";
 import {appActions} from "../../features/Application";
 
-
-type PropsType = {
-    demo?: boolean
-}
-
-function App({demo = false}: PropsType) {
+const App = () => {
 
     const dispatch = useAppDispatch()
     const status = useSelector(selectStatus)
@@ -34,7 +29,7 @@ function App({demo = false}: PropsType) {
     const {logout} = bindActionCreators(authActions,dispatch)
 
     useEffect(() => {
-        if (!demo) {
+        if (!isInitialized) {
             initializeApp()
         }
     }, [])

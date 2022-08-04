@@ -16,28 +16,21 @@ import {TaskStatuses, TaskType} from "../../../../api/types";
 type PropsType = {
     todolist: TodolistDomainType
     tasks: Array<TaskType>
-    demo?: boolean
 }
 
 type ColorType = 'inherit' | 'primary' | 'secondary'
 
-
-export const Todolist = React.memo( ({demo = false, ...props}: PropsType) => {
-    console.log('Todolist called')
+export const Todolist:React.FC<PropsType> = React.memo( ({todolist,tasks}) => {
 
     const dispatch = useAppDispatch()
 
     const {changeTodolistFilter, removeTodolist, changeTodolistTitle} = bindActionCreators(todolistsActions, dispatch)
     const {fetchTasks} = bindActionCreators(tasksActions, dispatch)
 
-    const {todolist,tasks} = props
-
-
     useEffect(() => {
-        if (demo) {
-            return
+        if(!tasks.length){
+            fetchTasks(todolist.id)
         }
-        fetchTasks(todolist.id)
     }, [])
 
     const addTaskCallback = useCallback(async (title: string,helper:AddItemForHelperType) => {
@@ -66,21 +59,21 @@ export const Todolist = React.memo( ({demo = false, ...props}: PropsType) => {
 
 
     const onButtonFilterClickHandler = useCallback((filter:FilterValuesType) => changeTodolistFilter({
-        filter, id: props.todolist.id
-    }), [props.todolist.id])
+        filter, id: todolist.id
+    }), [todolist.id])
 
     let tasksForTodolist = tasks
 
-    if (props.todolist.filter === 'active') {
+    if (todolist.filter === 'active') {
         tasksForTodolist = tasks.filter(t => t.status === TaskStatuses.New)
     }
-    if (props.todolist.filter === 'completed') {
+    if (todolist.filter === 'completed') {
         tasksForTodolist = tasks.filter(t => t.status === TaskStatuses.Completed)
     }
 
     const renderFilterButton = (buttonFilter: FilterValuesType,
                                 color: ColorType, text: string) => {
-        return <Button variant={props.todolist.filter === buttonFilter ? 'outlined' : 'text'}
+        return <Button variant={todolist.filter === buttonFilter ? 'outlined' : 'text'}
                        onClick={()=>onButtonFilterClickHandler(buttonFilter)}
                        color={color}
         >{text}

@@ -1,4 +1,3 @@
-import {AppRootStateType, RootReducerType} from "../../app/bll/store";
 import {TaskPriorities, TaskStatuses} from "../../api/types";
 import {combineReducers} from "redux";
 import {tasksReducer} from "../../features/TodolistsList/";
@@ -9,6 +8,7 @@ import thunkMiddleware from "redux-thunk";
 import {Provider} from "react-redux";
 import {HashRouter} from "react-router-dom";
 import { appReducer } from "../../features/Application";
+import {AppRootStateType, RootReducerType} from "../../app/bll/types";
 
 const storeRootReducer: RootReducerType = combineReducers({
     tasks: tasksReducer,

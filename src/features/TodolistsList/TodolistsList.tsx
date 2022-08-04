@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {AppRootStateType, useAppDispatch} from '../../app/bll/store';
+import {useAppDispatch} from '../../app/bll/store';
 import {TodolistDomainType} from './Todolist/bll/todolists-reducer';
 import {TasksStateType} from './Task/bll/tasks-reducer';
 import Grid from '@mui/material/Grid';
@@ -10,12 +10,10 @@ import {useNavigate} from 'react-router-dom';
 import {selectIsLoggedIn} from "../../app/bll/selectors";
 import {todolistsActions,} from "./index";
 import {bindActionCreators} from "redux";
+import {AppRootStateType} from "../../app/bll/types";
 
-type PropsType = {
-    demo?: boolean
-}
 
-export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
+export const TodolistsList = () => {
     const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const isLoggedIn = useSelector(selectIsLoggedIn)
@@ -24,12 +22,13 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
     const {fetchTodolists,addTodolist} = bindActionCreators(todolistsActions,dispatch)
 
     useEffect(() => {
-        if (isLoggedIn) {
-            fetchTodolists()
-        } else {
+        if (!isLoggedIn) {
             navigate('/login')
         }
-    }, [isLoggedIn])
+        if (!todolists.length){
+            fetchTodolists()
+        }
+    }, [])
 
     const addTodolistCallback = useCallback(async (title: string,helper:AddItemForHelperType) => {
         addTodolist(title);
@@ -41,7 +40,7 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
         <Grid container style={{padding: '20px'}}>
             <AddItemForm addItem={addTodolistCallback}/>
         </Grid>
-        <Grid container spacing={3} style={{flexWrap:'nowrap', overflowX: 'scroll'}}>
+        <Grid container spacing={3} style={{flexWrap:'nowrap'}}>
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id]
@@ -50,7 +49,6 @@ export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
                             <Todolist
                                 todolist={tl}
                                 tasks={allTodolistTasks}
-                                demo={demo}
                             />
                         </div>
                     </Grid>

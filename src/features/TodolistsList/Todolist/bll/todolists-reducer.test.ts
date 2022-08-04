@@ -1,5 +1,4 @@
-import {slice,TodolistDomainType,todolistsReducer} from "./todolists-reducer";
-import {TodolistType} from "../../../../api/types";
+import {slice, TodolistDomainType, todolistsReducer} from "./todolists-reducer";
 import {todolistsAsyncActions} from "./todolistActions";
 
 let todolistId1: string;
@@ -25,11 +24,13 @@ test('correct todolist should be removed', () => {
 })
 
 test('correct todolist should be added', () => {
-    let todo:TodolistType = {
+    let todo = {
         id:'new',
         title:'new todo',
         order:0,
         addedDate:'',
+        filter: 'all',
+        entityStatus: 'idle'
     }
 
     const endState = todolistsReducer(startState, addTodolist.fulfilled({todolist:todo},'requestId','new todo'))

@@ -2,9 +2,10 @@ import React from 'react';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, {AlertProps} from '@mui/material/Alert';
 import {useSelector} from 'react-redux';
-import {AppRootStateType, useAppDispatch} from '../../app/bll/store';
+import {useAppDispatch} from '../../app/bll/store';
 import {commonActions} from '../../features/CommonActions/';
 import {bindActionCreators} from "redux";
+import {AppRootStateType} from "../../app/bll/types";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     props, ref) {

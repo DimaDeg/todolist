@@ -11,7 +11,6 @@ export const slice = createSlice({
     reducers: {
         changeTodolistFilter: (state, action: PayloadAction<{ id: string, filter: FilterValuesType }>) => {
             const index = state.findIndex(f => f.id === action.payload.id);
-            console.log('logged')
             state[index].filter = action.payload.filter
         },
         changeTodolistEntityStatus: (state, action: PayloadAction<{ id: string, status: RequestStatusType }>) => {
