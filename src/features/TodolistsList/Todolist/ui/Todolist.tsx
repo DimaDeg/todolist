@@ -28,9 +28,7 @@ export const Todolist:React.FC<PropsType> = React.memo( ({todolist,tasks}) => {
     const {fetchTasks} = bindActionCreators(tasksActions, dispatch)
 
     useEffect(() => {
-        if(!tasks.length){
-            fetchTasks(todolist.id)
-        }
+        fetchTasks(todolist.id)
     }, [])
 
     const addTaskCallback = useCallback(async (title: string,helper:AddItemForHelperType) => {

@@ -3,6 +3,7 @@ import {authAPI} from "../../../api/todolists-api";
 import {handleAsyncServerAppError, handleAsyncServerNetworkError} from "../../../utils/error-utils";
 import {commonActions} from "../../CommonActions";
 import {LoginParamsType} from "../../../api/types";
+import {clearData} from "../../TodolistsList/Todolist/bll/todolists-reducer";
 
 const {setAppStatus} = commonActions
 //thunks
@@ -15,7 +16,6 @@ export const login = createAsyncThunk('auth/login', async (data: LoginParamsType
             thunkAPI.dispatch(setAppStatus({status: 'succeeded'}))
         } else {
             return handleAsyncServerAppError(res.data,thunkAPI)
-
         }
     }
     catch (error:any) {
@@ -30,6 +30,7 @@ export const logout = createAsyncThunk('auth/logout',async (param, thunkAPI) => 
         const res = await authAPI.logout()
         if (res.data.resultCode === 0) {
             thunkAPI.dispatch(setAppStatus({status: 'succeeded'}))
+            thunkAPI.dispatch(clearData())
         } else {
             return handleAsyncServerAppError(res.data, thunkAPI)
         }

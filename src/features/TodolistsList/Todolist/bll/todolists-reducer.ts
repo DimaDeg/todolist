@@ -5,6 +5,7 @@ import {TodolistType} from '../../../../api/types';
 
 
 const {fetchTodolists,removeTodolist,changeTodolistTitle,addTodolist} = todolistsAsyncActions
+
 export const slice = createSlice({
     name: 'todolist',
     initialState: [] as TodolistDomainType[],
@@ -17,6 +18,9 @@ export const slice = createSlice({
             const index = state.findIndex(f => f.id === action.payload.id);
             state[index].entityStatus = action.payload.status
         },
+        clearData: (state) => {
+            state.length = 0
+        }
 
     },
     extraReducers: builder => {
@@ -36,12 +40,12 @@ export const slice = createSlice({
             .addCase(changeTodolistTitle.fulfilled, (state, action) => {
                 const index = state.findIndex(f => f.id === action.payload.id);
                 state[index].title = action.payload.title;
-            });
+            })
     }
 })
 
 export const todolistsReducer = slice.reducer;
-export const {changeTodolistFilter,changeTodolistEntityStatus} = slice.actions
+export const {changeTodolistFilter,changeTodolistEntityStatus,clearData} = slice.actions
 
 // types
 export type FilterValuesType = 'all' | 'active' | 'completed';

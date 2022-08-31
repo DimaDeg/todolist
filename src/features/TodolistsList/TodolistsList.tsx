@@ -25,10 +25,10 @@ export const TodolistsList = () => {
         if (!isLoggedIn) {
             navigate('/login')
         }
-        if (!todolists.length){
+        if (!todolists.length && isLoggedIn){
             fetchTodolists()
         }
-    }, [])
+    }, [isLoggedIn])
 
     const addTodolistCallback = useCallback(async (title: string,helper:AddItemForHelperType) => {
         addTodolist(title);
@@ -40,7 +40,7 @@ export const TodolistsList = () => {
         <Grid container style={{padding: '20px'}}>
             <AddItemForm addItem={addTodolistCallback}/>
         </Grid>
-        <Grid container spacing={3} style={{flexWrap:'nowrap'}}>
+        <Grid container spacing={4} style={{flexWrap:'nowrap'}}>
             {
                 todolists.map(tl => {
                     let allTodolistTasks = tasks[tl.id]
